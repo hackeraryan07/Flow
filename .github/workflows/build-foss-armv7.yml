@@ -62,11 +62,23 @@ jobs:
           cp "$apk" dist-foss/app-foss-armeabi-v7a-release.apk
           ls -la dist-foss
 
+      # Unsigned APK install nahi hoti, isliye yahan khud sign karte hain.
+      # Note: har build par nayi key banti hai, to update-over-update nahi hoga.
+      - name: Sign APK
+        run: |
+          apksigner=$(find "$ANDROID_SDK_ROOT/build-tools" -name apksigner -type f | sort -V | tail -1)
+          keytool -genkeypair -keystore my.keystore -storepass android -keypass android \
+            -alias key -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Flow Custom"
+          "$apksigner" sign --ks my.keystore --ks-pass pass:android --key-pass pass:android \
+            --out dist-foss/app-foss-armeabi-v7a-release-signed.apk \
+            dist-foss/app-foss-armeabi-v7a-release.apk
+          "$apksigner" verify --print-certs dist-foss/app-foss-armeabi-v7a-release-signed.apk
+
       - name: Upload FOSS ARMv7 APK
         uses: actions/upload-artifact@v7
         with:
           name: flow-foss-armeabi-v7a-release-apk
-          path: dist-foss/app-foss-armeabi-v7a-release.apk
+          path: dist-foss/app-foss-armeabi-v7a-release-signed.apk
           if-no-files-found: error
           retention-days: 14
           compression-level: 0
