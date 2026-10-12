@@ -55,14 +55,18 @@ jobs:
 
       - name: Locate APK
         run: |
-          ls -la app/build/outputs/apk/foss/release/
-          test -f app/build/outputs/apk/foss/release/app-foss-armeabi-v7a-release.apk
+          mkdir -p dist-foss
+          find app/build -name "*.apk" -print
+          apk=$(find app/build -name "*.apk" -path "*foss*" | head -1)
+          test -n "$apk"
+          cp "$apk" dist-foss/app-foss-armeabi-v7a-release.apk
+          ls -la dist-foss
 
       - name: Upload FOSS ARMv7 APK
         uses: actions/upload-artifact@v7
         with:
           name: flow-foss-armeabi-v7a-release-apk
-          path: app/build/outputs/apk/foss/release/app-foss-armeabi-v7a-release*.apk
+          path: dist-foss/app-foss-armeabi-v7a-release.apk
           if-no-files-found: error
           retention-days: 14
           compression-level: 0
