@@ -2,10 +2,8 @@ package io.github.aedev.flow.ui.tv.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -121,8 +119,8 @@ fun TvNavRail(
                 }
                 AnimatedVisibility(
                     visible = expanded,
-                    enter = fadeIn() + expandHorizontally(),
-                    exit = fadeOut() + shrinkHorizontally(),
+                    enter = fadeIn(),
+                    exit = fadeOut(),
                 ) {
                     Text(
                         text = stringResource(R.string.app_name),
@@ -188,8 +186,8 @@ private fun TvRailItem(
             )
             AnimatedVisibility(
                 visible = expanded,
-                enter = fadeIn() + expandHorizontally(),
-                exit = fadeOut() + shrinkHorizontally(),
+                enter = fadeIn(),
+                exit = fadeOut(),
             ) {
                 Text(
                     text = stringResource(destination.labelRes),

@@ -3,8 +3,6 @@ package io.github.aedev.flow.ui.tv.player
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,8 +44,8 @@ fun BoxScope.TvPlayerOverlay(
     AnimatedVisibility(
         visible = visible,
         modifier = Modifier.align(Alignment.TopCenter),
-        enter = fadeIn() + slideInVertically { -it / 3 },
-        exit = fadeOut() + slideOutVertically { -it / 3 },
+        enter = fadeIn(),
+        exit = fadeOut(),
     ) {
         Box(
             modifier = Modifier
@@ -101,8 +99,8 @@ fun BoxScope.TvPlayerOverlay(
     AnimatedVisibility(
         visible = visible,
         modifier = Modifier.align(Alignment.BottomCenter),
-        enter = fadeIn() + slideInVertically { it / 3 },
-        exit = fadeOut() + slideOutVertically { it / 3 },
+        enter = fadeIn(),
+        exit = fadeOut(),
     ) {
         Column(
             modifier = Modifier
