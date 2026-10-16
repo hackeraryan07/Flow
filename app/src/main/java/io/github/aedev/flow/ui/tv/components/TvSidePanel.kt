@@ -3,8 +3,6 @@ package io.github.aedev.flow.ui.tv.components
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -64,8 +62,8 @@ fun BoxScope.TvSidePanel(
     AnimatedVisibility(
         visible = visible,
         modifier = modifier.align(Alignment.CenterEnd),
-        enter = fadeIn() + slideInHorizontally { it / 3 },
-        exit = fadeOut() + slideOutHorizontally { it / 3 },
+        enter = fadeIn(),
+        exit = fadeOut(),
     ) {
         Surface(
             modifier = Modifier
