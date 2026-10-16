@@ -11,7 +11,10 @@ enum class ThumbnailQuality {
     ;
 
     companion object {
-        fun fromName(name: String?): ThumbnailQuality = entries.firstOrNull { it.name == name } ?: HIGH
+        fun fromName(
+            name: String?,
+            default: ThumbnailQuality = HIGH,
+        ): ThumbnailQuality = entries.firstOrNull { it.name == name } ?: default
 
         fun effective(
             isWifi: Boolean,
