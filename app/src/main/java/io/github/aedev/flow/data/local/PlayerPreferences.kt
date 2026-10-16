@@ -1354,7 +1354,10 @@ class PlayerPreferences(
     val defaultQualityWifi: Flow<VideoQuality> =
         context.playerPreferencesDataStore.data
             .map { preferences ->
-                VideoQuality.fromString(preferences[Keys.DEFAULT_QUALITY_WIFI] ?: "1080p")
+                VideoQuality.fromString(
+                    preferences[Keys.DEFAULT_QUALITY_WIFI]
+                        ?: io.github.aedev.flow.utils.LowEndDevice.defaultWifiVideoQuality(context),
+                )
             }
 
     val defaultQualityCellular: Flow<VideoQuality> =
@@ -1445,11 +1448,21 @@ class PlayerPreferences(
 
     val thumbnailQualityWifi: Flow<ThumbnailQuality> =
         context.playerPreferencesDataStore.data
-            .map { preferences -> ThumbnailQuality.fromName(preferences[Keys.THUMBNAIL_QUALITY_WIFI]) }
+            .map { preferences ->
+                ThumbnailQuality.fromName(
+                    preferences[Keys.THUMBNAIL_QUALITY_WIFI],
+                    default = io.github.aedev.flow.utils.LowEndDevice.defaultThumbnailQuality(context),
+                )
+            }
 
     val thumbnailQualityCellular: Flow<ThumbnailQuality> =
         context.playerPreferencesDataStore.data
-            .map { preferences -> ThumbnailQuality.fromName(preferences[Keys.THUMBNAIL_QUALITY_CELLULAR]) }
+            .map { preferences ->
+                ThumbnailQuality.fromName(
+                    preferences[Keys.THUMBNAIL_QUALITY_CELLULAR],
+                    default = io.github.aedev.flow.utils.LowEndDevice.defaultThumbnailQuality(context),
+                )
+            }
 
     suspend fun setThumbnailQualityWifi(quality: ThumbnailQuality) {
         context.playerPreferencesDataStore.edit { preferences ->
