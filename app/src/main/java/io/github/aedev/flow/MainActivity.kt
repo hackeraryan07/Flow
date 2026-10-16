@@ -544,6 +544,15 @@ class MainActivity : ComponentActivity() {
         PictureInPictureHelper.dismissPopup(this)
     }
 
+    // Physical keyboard shortcuts (Space, arrows, J/K/L, F, M, ...) for the video player.
+    // Runs before the view hierarchy so Compose focus handling can't swallow the arrow keys.
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (io.github.aedev.flow.ui.screens.player.stage.PlayerKeyboardShortcuts.dispatch(event)) {
+            return true
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
     override fun onKeyDown(
         keyCode: Int,
         event: KeyEvent,

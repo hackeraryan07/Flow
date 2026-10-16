@@ -240,6 +240,8 @@ internal fun VideoStageControls(
                 screenState.onInteraction()
             },
         )
+    PlayerKeyboardShortcutsEffect(session = session, actions = controlsActions)
+
     PlayerControlsOverlay(
         state = controlsState,
         actions = controlsActions,
