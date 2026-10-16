@@ -1356,7 +1356,8 @@ class PlayerPreferences(
             .map { preferences ->
                 VideoQuality.fromString(
                     preferences[Keys.DEFAULT_QUALITY_WIFI]
-                        ?: io.github.aedev.flow.utils.LowEndDevice.defaultWifiVideoQuality(context),
+                        ?: io.github.aedev.flow.utils.LowEndDevice
+                            .defaultWifiVideoQuality(context),
                 )
             }
 
@@ -1451,7 +1452,9 @@ class PlayerPreferences(
             .map { preferences ->
                 ThumbnailQuality.fromName(
                     preferences[Keys.THUMBNAIL_QUALITY_WIFI],
-                    default = io.github.aedev.flow.utils.LowEndDevice.defaultThumbnailQuality(context),
+                    default =
+                        io.github.aedev.flow.utils.LowEndDevice
+                            .defaultThumbnailQuality(context),
                 )
             }
 
@@ -1460,7 +1463,9 @@ class PlayerPreferences(
             .map { preferences ->
                 ThumbnailQuality.fromName(
                     preferences[Keys.THUMBNAIL_QUALITY_CELLULAR],
-                    default = io.github.aedev.flow.utils.LowEndDevice.defaultThumbnailQuality(context),
+                    default =
+                        io.github.aedev.flow.utils.LowEndDevice
+                            .defaultThumbnailQuality(context),
                 )
             }
 

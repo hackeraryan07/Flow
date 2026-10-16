@@ -181,7 +181,8 @@ internal fun PlayerKeyboardShortcutsEffect(
                 manager.setPlaybackSpeed(next)
                 seekState.toast?.cancel()
                 seekState.toast =
-                    Toast.makeText(s.context, "${next.toString().removeSuffix(".0")}x", Toast.LENGTH_SHORT)
+                    Toast
+                        .makeText(s.context, "${next.toString().removeSuffix(".0")}x", Toast.LENGTH_SHORT)
                         .also { it.show() }
             }
 
@@ -193,16 +194,57 @@ internal fun PlayerKeyboardShortcutsEffect(
                         if (!isRepeat) a.onPlayPause()
                         true
                     }
-                    KeyEvent.KEYCODE_DPAD_LEFT -> { seekBy(-ARROW_SEEK_MS); true }
-                    KeyEvent.KEYCODE_DPAD_RIGHT -> { seekBy(ARROW_SEEK_MS); true }
-                    KeyEvent.KEYCODE_J -> { seekBy(-JL_SEEK_MS); true }
-                    KeyEvent.KEYCODE_L -> { seekBy(JL_SEEK_MS); true }
-                    KeyEvent.KEYCODE_DPAD_UP -> { adjustVolume(AudioManager.ADJUST_RAISE); true }
-                    KeyEvent.KEYCODE_DPAD_DOWN -> { adjustVolume(AudioManager.ADJUST_LOWER); true }
-                    KeyEvent.KEYCODE_M -> { if (!isRepeat) toggleMute(); true }
-                    KeyEvent.KEYCODE_F -> { if (!isRepeat) a.onFullscreenClick(); true }
-                    KeyEvent.KEYCODE_C -> { if (!isRepeat) a.onSubtitleClick(); true }
-                    KeyEvent.KEYCODE_MOVE_HOME -> { seekToFraction(0f); true }
+
+                    KeyEvent.KEYCODE_DPAD_LEFT -> {
+                        seekBy(-ARROW_SEEK_MS)
+                        true
+                    }
+
+                    KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                        seekBy(ARROW_SEEK_MS)
+                        true
+                    }
+
+                    KeyEvent.KEYCODE_J -> {
+                        seekBy(-JL_SEEK_MS)
+                        true
+                    }
+
+                    KeyEvent.KEYCODE_L -> {
+                        seekBy(JL_SEEK_MS)
+                        true
+                    }
+
+                    KeyEvent.KEYCODE_DPAD_UP -> {
+                        adjustVolume(AudioManager.ADJUST_RAISE)
+                        true
+                    }
+
+                    KeyEvent.KEYCODE_DPAD_DOWN -> {
+                        adjustVolume(AudioManager.ADJUST_LOWER)
+                        true
+                    }
+
+                    KeyEvent.KEYCODE_M -> {
+                        if (!isRepeat) toggleMute()
+                        true
+                    }
+
+                    KeyEvent.KEYCODE_F -> {
+                        if (!isRepeat) a.onFullscreenClick()
+                        true
+                    }
+
+                    KeyEvent.KEYCODE_C -> {
+                        if (!isRepeat) a.onSubtitleClick()
+                        true
+                    }
+
+                    KeyEvent.KEYCODE_MOVE_HOME -> {
+                        seekToFraction(0f)
+                        true
+                    }
+
                     KeyEvent.KEYCODE_MOVE_END -> {
                         // Land just before the end so the video doesn't instantly auto-advance.
                         val duration = screenState.duration
@@ -214,7 +256,8 @@ internal fun PlayerKeyboardShortcutsEffect(
                         }
                         true
                     }
-                    KeyEvent.KEYCODE_COMMA ->
+
+                    KeyEvent.KEYCODE_COMMA -> {
                         if (shift) {
                             changeSpeed(faster = false)
                             true
@@ -224,7 +267,9 @@ internal fun PlayerKeyboardShortcutsEffect(
                         } else {
                             false
                         }
-                    KeyEvent.KEYCODE_PERIOD ->
+                    }
+
+                    KeyEvent.KEYCODE_PERIOD -> {
                         if (shift) {
                             changeSpeed(faster = true)
                             true
@@ -234,17 +279,39 @@ internal fun PlayerKeyboardShortcutsEffect(
                         } else {
                             false
                         }
-                    KeyEvent.KEYCODE_N -> if (shift && !isRepeat) { a.onNext(); true } else false
-                    KeyEvent.KEYCODE_P -> if (shift && !isRepeat) { a.onPrevious(); true } else false
+                    }
+
+                    KeyEvent.KEYCODE_N -> {
+                        if (shift && !isRepeat) {
+                            a.onNext()
+                            true
+                        } else {
+                            false
+                        }
+                    }
+
+                    KeyEvent.KEYCODE_P -> {
+                        if (shift && !isRepeat) {
+                            a.onPrevious()
+                            true
+                        } else {
+                            false
+                        }
+                    }
+
                     in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> {
                         seekToFraction((keyCode - KeyEvent.KEYCODE_0) / 10f)
                         true
                     }
+
                     in KeyEvent.KEYCODE_NUMPAD_0..KeyEvent.KEYCODE_NUMPAD_9 -> {
                         seekToFraction((keyCode - KeyEvent.KEYCODE_NUMPAD_0) / 10f)
                         true
                     }
-                    else -> false
+
+                    else -> {
+                        false
+                    }
                 }
 
             if (handled) {

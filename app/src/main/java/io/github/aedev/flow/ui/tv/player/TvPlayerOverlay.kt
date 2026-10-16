@@ -48,15 +48,17 @@ fun BoxScope.TvPlayerOverlay(
         exit = fadeOut(),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(scrimColor),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(scrimColor),
         ) {
             Column(
-                modifier = Modifier.padding(
-                    horizontal = dimens.overscanHorizontal,
-                    vertical = dimens.overscanVertical,
-                ),
+                modifier =
+                    Modifier.padding(
+                        horizontal = dimens.overscanHorizontal,
+                        vertical = dimens.overscanVertical,
+                    ),
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 Row(
@@ -103,14 +105,15 @@ fun BoxScope.TvPlayerOverlay(
         exit = fadeOut(),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    start = dimens.overscanHorizontal,
-                    end = dimens.overscanHorizontal,
-                    top = 20.dp,
-                    bottom = dimens.overscanVertical,
-                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = dimens.overscanHorizontal,
+                        end = dimens.overscanHorizontal,
+                        top = 20.dp,
+                        bottom = dimens.overscanVertical,
+                    ),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             content = bottomContent,
         )

@@ -65,9 +65,12 @@ object AppModule {
                 DiskCache
                     .Builder()
                     .directory(context.cacheDir.resolve(IMAGE_CACHE_DIR).toOkioPath())
-                    .apply { if (limit != null) maxSizeBytes(limit) else maxSizePercent(AUTOMATIC_DISK_SHARE) }
-                    .build()
-            }.crossfade(!io.github.aedev.flow.utils.LowEndDevice.isLowEnd(context))
-            .apply { if (BuildConfig.DEBUG) logger(DebugLogger()) }
+                    .apply {
+                        if (limit != null) maxSizeBytes(limit) else maxSizePercent(AUTOMATIC_DISK_SHARE)
+                    }.build()
+            }.crossfade(
+                !io.github.aedev.flow.utils.LowEndDevice
+                    .isLowEnd(context),
+            ).apply { if (BuildConfig.DEBUG) logger(DebugLogger()) }
             .build()
 }
