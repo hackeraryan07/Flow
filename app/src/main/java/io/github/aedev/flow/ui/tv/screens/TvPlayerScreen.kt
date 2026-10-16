@@ -312,13 +312,29 @@ fun TvPlayerScreen(
         runCatching { rootFocusRequester.requestFocus() }
     }
 
-    BackHandler {
+    // Set when a Back key event was already handled in onPreviewKeyEvent, so the system's own Back
+    // callback for that same press can't run a second step (hide -> close the player).
+    var lastBackKeyHandledAt by remember { mutableStateOf(0L) }
+    var backKeyDownConsumed by remember { mutableStateOf(false) }
+
+    // One Back press dismisses everything the overlay is showing. An in-flight scrub is cancelled
+    // *and* the transport is hidden together, rather than spending one press on the scrub/focus
+    // and a second on the overlay. With the overlay already hidden, Back closes the player.
+    fun handleBack() {
         if (scrubController.current.isScrubbing) {
             scrubController.cancel()
             scrubUiState = scrubController.current
+            overlayController.hide()
         } else if (!overlayController.onBack()) {
             onClose()
         }
+    }
+
+    BackHandler {
+        if (SystemClock.uptimeMillis() - lastBackKeyHandledAt < BACK_KEY_DEBOUNCE_MS) {
+            return@BackHandler
+        }
+        handleBack()
     }
 
     val title = video.title
@@ -333,9 +349,13 @@ fun TvPlayerScreen(
                 .focusable()
                 .onPreviewKeyEvent { event ->
                     val keyCode = event.nativeKeyEvent.keyCode
+                    val isBackKey = keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_ESCAPE
                     when (event.type) {
                         KeyEventType.KeyUp -> {
-                            if (scrubController.current.isScrubbing &&
+                            if (isBackKey && backKeyDownConsumed) {
+                                backKeyDownConsumed = false
+                                true
+                            } else if (scrubController.current.isScrubbing &&
                                 (keyCode == KeyEvent.KEYCODE_DPAD_LEFT || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT)
                             ) {
                                 commitScrub()
@@ -346,7 +366,24 @@ fun TvPlayerScreen(
                         }
 
                         KeyEventType.KeyDown -> {
-                            handleKeyDown(keyCode, event.nativeKeyEvent.repeatCount)
+                            if (isBackKey) {
+                                // Handled here, ahead of whatever is focused, whenever the overlay is up:
+                                // the focused control must never swallow the first Back.
+                                if (backKeyDownConsumed) {
+                                    true // key repeat of a press we already handled
+                                } else if (overlayController.state.value.mode != TvOverlayMode.HIDDEN ||
+                                    scrubController.current.isScrubbing
+                                ) {
+                                    backKeyDownConsumed = true
+                                    lastBackKeyHandledAt = SystemClock.uptimeMillis()
+                                    handleBack()
+                                    true
+                                } else {
+                                    false // overlay hidden: let Back close the player via BackHandler
+                                }
+                            } else {
+                                handleKeyDown(keyCode, event.nativeKeyEvent.repeatCount)
+                            }
                         }
 
                         else -> {
@@ -504,3 +541,4 @@ fun TvPlayerScreen(
 }
 
 private const val MEDIA_KEY_SEEK_MS = 10_000L
+private const val BACK_KEY_DEBOUNCE_MS = 300L
