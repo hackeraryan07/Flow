@@ -167,6 +167,10 @@ android {
     sourceSets {
         getByName("androidTest").assets.directories.add("$projectDir/schemas")
         getByName("nightly").baselineProfiles.directories.add("src/githubRelease/generated/baselineProfiles")
+        // The FOSS release (including the armeabi-v7a TV APK from build-foss-armv7.yml) is a
+        // separate variant and was shipping with no baseline profile at all, so it ran uncompiled
+        // until ART's background dexopt caught up. Rules naming github-only classes are ignored.
+        maybeCreate("fossRelease").baselineProfiles.directories.add("src/githubRelease/generated/baselineProfiles")
     }
 
     compileOptions {
